@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import sys
@@ -21,7 +22,7 @@ from .core import (
     get_synced_data,
     synced_data_to_camera_parameters,
 )
-from .utils import get_basename, rescale_data
+from .utils import get_basename, make_json_serializable, rescale_data
 from .visualizations import (
     draw_epipolar_lines,
     draw_feature_matches,
@@ -133,6 +134,28 @@ def run(
     pts1, pts2 = get_synced_data(club1, club2, conf1, conf2)
     print(f"Number of feature matches: {len(pts1)}")
     R, T, F, K = synced_data_to_camera_parameters(pts1, pts2)
+
+    camera_parameter = dict(
+        R=R,
+        T=T,
+        F=F,
+        K=K,
+    )
+    camera_parameter_json = make_json_serializable(camera_parameter)
+    with open(
+        os.path.join(
+            output_path, DATA_DIR_NAME, video_name1, "camera_parameter.json"
+        ),
+        "w",
+    ) as f:
+        json.dump(camera_parameter_json, f, indent=4)
+    with open(
+        os.path.join(
+            output_path, DATA_DIR_NAME, video_name2, "camera_parameter.json"
+        ),
+        "w",
+    ) as f:
+        json.dump(camera_parameter_json, f, indent=4)
 
     logging.info("Reconstruct 3D data")
     reconstructed_3d_df = generate_reconstructed_3d_data(

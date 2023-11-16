@@ -59,6 +59,18 @@ def get_basename(path):
     return os.path.splitext(os.path.basename(path))[0]
 
 
+def make_json_serializable(data):
+    if isinstance(data, np.ndarray):
+        return data.tolist()
+    elif isinstance(data, tuple):
+        return [make_json_serializable(x) for x in data]
+    elif isinstance(data, dict):
+        return {k: make_json_serializable(v) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [make_json_serializable(x) for x in data]
+    return data
+
+
 def calculate_body_part_center(df: pd.DataFrame, target: str):
     for axis in ["x", "y", "z"]:
         if target != "MOUTH":
