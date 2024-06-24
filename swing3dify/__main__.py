@@ -13,7 +13,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-f2", "--file2", help="Path to the second video file."
     )
-    parser.add_argument("-o", "--output", help="Path to the output directory.")
+    parser.add_argument("-o", "--output", default=os.getcwd(), help="Path to the output directory.")
     parser.add_argument(
         "-p", "--pose_model", help="Path to the pose estimation model."
     )

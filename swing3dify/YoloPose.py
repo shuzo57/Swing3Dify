@@ -7,15 +7,9 @@ import numpy as np
 import pandas as pd
 from ultralytics import YOLO
 
-from .config import (
-    CONFIDENCE_FILE_NAME,
-    DATA_DIR_NAME,
-    IMG_DIR_NAME,
-    POSE_CONF_COLUMNS,
-    POSE_DIR_NAME,
-    POSE_POSITION_COLUMNS,
-    POSITION_FILE_NAME,
-)
+from .config import (CONFIDENCE_FILE_NAME, DATA_DIR_NAME, IMG_DIR_NAME,
+                     POSE_CONF_COLUMNS, POSE_DIR_NAME, POSE_POSITION_COLUMNS,
+                     POSITION_FILE_NAME)
 from .utils import get_basename, get_video_paths
 
 
@@ -114,7 +108,7 @@ if __name__ == "__main__":
         "-p", "--path", help="path to model", default="yolov8s-pose.pt"
     )
     parser.add_argument(
-        "-s", "--save_images", help="save images", type=bool, default=False
+        "-s", "--save_images", help="save images", action="store_true", default=False
     )
     args = parser.parse_args()
     YoloPose(args.input, args.output, args.path, args.save_images)

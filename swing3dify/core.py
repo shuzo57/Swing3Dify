@@ -18,6 +18,7 @@ def get_synced_data(
     club2.interpolate(method="linear", both=True, inplace=True)
 
     delay_frame = calculate_delay_frame(club1, club2, part_name)
+    print(f"delay_frame: {delay_frame}")
 
     new_club1 = club1.copy()
     new_club2 = club2.copy()
@@ -30,12 +31,8 @@ def get_synced_data(
     new_club1["new_frame"] = new_club1["frame"]
     new_club2["new_frame"] = new_club2["frame"] + delay_frame
 
-    index1 = set(
-        new_club1[~new_club1.isnull().any(axis=1)]["new_frame"].values
-    )
-    index2 = set(
-        new_club2[~new_club2.isnull().any(axis=1)]["new_frame"].values
-    )
+    index1 = set(new_club1[~new_club1.isnull().any(axis=1)]["new_frame"].values)
+    index2 = set(new_club2[~new_club2.isnull().any(axis=1)]["new_frame"].values)
 
     common_index = np.array(sorted(list(index1 & index2)))
 

@@ -6,28 +6,15 @@ import sys
 import cv2
 import pandas as pd
 
-from .config import (
-    CLUB_DIR_NAME,
-    CONFIDENCE_FILE_NAME,
-    DATA_DIR_NAME,
-    FIGURE_DIR_NAME,
-    FIGURE_EXT,
-    POSE_DIR_NAME,
-    POSITION_FILE_NAME,
-    RECONSTRUCTED_DIR_NAME,
-    RECONSTRUCTED_FILE_NAME,
-)
-from .core import (
-    generate_reconstructed_3d_data,
-    get_synced_data,
-    synced_data_to_camera_parameters,
-)
+from .config import (CLUB_DIR_NAME, CONFIDENCE_FILE_NAME, DATA_DIR_NAME,
+                     FIGURE_DIR_NAME, FIGURE_EXT, POSE_DIR_NAME,
+                     POSITION_FILE_NAME, RECONSTRUCTED_DIR_NAME,
+                     RECONSTRUCTED_FILE_NAME)
+from .core import (generate_reconstructed_3d_data, get_synced_data,
+                   synced_data_to_camera_parameters)
 from .utils import get_basename, make_json_serializable, rescale_data
-from .visualizations import (
-    draw_epipolar_lines,
-    draw_feature_matches,
-    show_3d_swing,
-)
+from .visualizations import (draw_epipolar_lines, draw_feature_matches,
+                             show_3d_swing)
 from .YoloClub import YoloClub
 from .YoloPose import YoloPose
 
@@ -135,26 +122,11 @@ def run(
     print(f"Number of feature matches: {len(pts1)}")
     R, T, F, K = synced_data_to_camera_parameters(pts1, pts2)
 
-    camera_parameter = dict(
-        R=R,
-        T=T,
-        F=F,
-        K=K,
-    )
+    camera_parameter = dict(R=R, T=T, F=F, K=K, pts=[pts1, pts2])
     camera_parameter_json = make_json_serializable(camera_parameter)
-    with open(
-        os.path.join(
-            output_path, DATA_DIR_NAME, video_name1, "camera_parameter.json"
-        ),
-        "w",
-    ) as f:
+    with open(os.path.join(output_path, DATA_DIR_NAME, video_name1, "camera_parameter.json"), "w",) as f:
         json.dump(camera_parameter_json, f, indent=4)
-    with open(
-        os.path.join(
-            output_path, DATA_DIR_NAME, video_name2, "camera_parameter.json"
-        ),
-        "w",
-    ) as f:
+    with open(os.path.join(output_path, DATA_DIR_NAME, video_name2, "camera_parameter.json"), "w",) as f:
         json.dump(camera_parameter_json, f, indent=4)
 
     logging.info("Reconstruct 3D data")
